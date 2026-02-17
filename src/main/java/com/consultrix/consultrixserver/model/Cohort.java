@@ -2,12 +2,15 @@ package com.consultrix.consultrixserver.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "cohorts")
@@ -16,13 +19,15 @@ public class Cohort {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "warehouse_id")
-    private int warehouseId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "facility_id")
+    private Facility facility;
 
-    @Column(name = "primary_instructor_user_id")
-    private int primaryInstructorUserId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "primary_instructor_user_id")
+    private Instructor instructor;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "start_date")
@@ -31,15 +36,18 @@ public class Cohort {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "capacity")
-    private int capacity;
+    @Column(name = "capacity", nullable = false)
+    private Integer capacity = 0;
 
-    @Column(name = "status")
-    private String status;
+    // RECRUITING / INTERVIEWING / ACTIVE / COMPLETED / ARCHIVED
+    @Column(name = "status", nullable = false)
+    private String status = "RECRUITING";
 
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

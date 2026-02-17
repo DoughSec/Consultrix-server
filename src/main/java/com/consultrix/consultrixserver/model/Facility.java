@@ -2,25 +2,28 @@ package com.consultrix.consultrixserver.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "facilities")
 public class Facility {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "organization_id")
-    private int organizationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "address_line1")
@@ -35,8 +38,8 @@ public class Facility {
     @Column(name = "country")
     private String country;
 
-    @Column(name = "capacity")
-    private BigInteger capacity;
+    @Column(name = "capacity", nullable = false)
+    private Integer capacity = 0;
 
     @Column(name = "lease_start_date")
     private LocalDate leaseStartDate;
@@ -44,12 +47,15 @@ public class Facility {
     @Column(name = "lease_end_date")
     private LocalDate leaseEndDate;
 
-    @Column(name = "status")
-    private String status;
+    // ACTIVE / PLANNED / CLOSED
+    @Column(name = "status", nullable = false)
+    private String status = "PLANNED";
 
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
