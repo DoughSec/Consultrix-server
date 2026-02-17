@@ -2,12 +2,15 @@ package com.consultrix.consultrixserver.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "modules")
@@ -16,12 +19,14 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "cohort_id")
-    private int cohortId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cohort_id")
+    private Cohort cohort;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
+    @Lob
     @Column(name = "description")
     private String description;
 
@@ -31,12 +36,14 @@ public class Module {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "order_index")
-    private int orderIndex;
+    @Column(name = "order_index", nullable = false)
+    private Integer orderIndex = 0;
 
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

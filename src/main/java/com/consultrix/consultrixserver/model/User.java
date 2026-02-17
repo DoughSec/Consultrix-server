@@ -2,43 +2,50 @@ package com.consultrix.consultrixserver.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "users")
-public class User {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "user_type")
+public abstract class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "organization_id")
-    private int organizationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
-    @Column(name = "user_type")
-    private String userType;
-
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password_hash")
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(name = "status")
-    private String status;
+    // ACTIVE // INACTIVE // SUSPENDED
+    @Column(name = "status", nullable = false)
+    private String status = "ACTIVE";
 
-    @Column(name = "created_at")
+    @CreationTimestamp // Automatically set the creation timestamp when the entity is persisted
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp // Automatically update the timestamp when the entity is updated
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

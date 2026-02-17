@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "admins")
-public class Admin {
-    @Id
-    @Column(name = "user_id")
-    private int userId;
+@DiscriminatorValue("ADMIN")
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Admin extends User {
 
-    @Column(name="admin_level")
-    private String adminLevel;
+    @Column(name="admin_level", nullable = false)
+    private String adminLevel = "PEOPLESHORES_ADMIN";
 }

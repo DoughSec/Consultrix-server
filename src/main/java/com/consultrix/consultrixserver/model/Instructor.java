@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "instructors")
-public class Instructor {
-    @Id
-    @Column(name="user_id")
-    private int userId;
+@DiscriminatorValue("INSTRUCTOR")
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Instructor extends User {
 
     @Column(name = "title")
     private String title;

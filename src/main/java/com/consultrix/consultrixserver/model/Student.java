@@ -6,27 +6,30 @@ import lombok.*;
 import java.time.LocalDate;
 
 @AllArgsConstructor
-@Data //replaces getter and setter
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
-@Table(name="students") //no need for SQL query to create table, just need to run the application and it will create the table for us
-public class Student {
+@Table(name="students")
+@DiscriminatorValue("STUDENT")
+@PrimaryKeyJoinColumn(name = "user_id") //this is the foreign key that references the user_id in the users table
+public class Student extends User {
 
-    @Id
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cohort_id")
+    private Cohort cohort;
 
-    @Column(name = "cohort_id")
-    private int cohortId;
+    // ACTIVE / COMPLETED / WITHDRAWN
+    @Column(name = "graduation_status", nullable = false)
+    private String graduationStatus = "ACTIVE";
 
-    @Column(name = "graduation_status")
-    private String graduationStatus;
+    // NOT_STARTED / IN_PROGRESS / COMPLETED
+    @Column(name = "pipeline_stage", nullable = false)
+    private String pipeLineStage = "NOT_STARTED";
 
-    @Column(name = "pipeline_stage")
-    private String pipeLineStage;
-
-    @Column(name = "interview_stage")
-    private String interviewStage;
+    // NONE / SCREEN / TECHNICAL / FINAL
+    @Column(name = "interview_stage", nullable = false)
+    private String interviewStage = "NONE";
 
     @Column(name = "client_name")
     private String clientName;
@@ -37,6 +40,7 @@ public class Student {
     @Column(name = "resume_url")
     private String resumeUrl;
 
+    @Lob
     @Column(name = "notes")
     private String notes;
 
