@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Table(name = "admins")
 public class Admin {
-//    @Id
+    @Id
     @Column(name = "user_id")
     private int userId;
 

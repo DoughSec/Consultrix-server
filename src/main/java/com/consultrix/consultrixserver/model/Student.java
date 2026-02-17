@@ -12,8 +12,7 @@ import java.time.LocalDate;
 @Table(name="students") //no need for SQL query to create table, just need to run the application and it will create the table for us
 public class Student {
 
-
-    //TODO: not sure if need auto generated value here
+    @Id
     @Column(name = "user_id")
     private int userId;
 
