@@ -92,11 +92,11 @@ public class AttendanceService {
     }
 
     // update Attendance
-    public Attendance update(Integer attendanceId, String status, String note) {
+    public Attendance update(Integer attendanceId, Attendance updated) {
         Attendance existing = getById(attendanceId);
 
-        existing.setStatus(status);
-        existing.setNote(note);
+        existing.setStatus(updated.getStatus());
+        existing.setNote(updated.getNote());
 
         return attendanceRepository.save(existing);
     }
