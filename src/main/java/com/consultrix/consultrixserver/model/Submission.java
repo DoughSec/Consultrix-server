@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Submission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "assignment_id", nullable = false)

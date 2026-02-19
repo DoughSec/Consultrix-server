@@ -19,7 +19,7 @@ uniqueConstraints = @UniqueConstraint(
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cohort_id", nullable = false)

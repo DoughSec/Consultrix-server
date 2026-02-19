@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FacilityRepository extends JpaRepository<Facility, Long> {
+public interface FacilityRepository extends JpaRepository<Facility, Integer> {
     List<Facility> findByStatus(String status);
-    List<Facility> findByOrganizationId(int organizationId);
+    List<Facility> findByOrganizationId(Integer organizationId);
 }

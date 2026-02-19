@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ModuleRepository extends JpaRepository<Module, Long> {
-    List<Module> findByCohortIdOrderByOrderIndexAsc(int cohortId);
+public interface ModuleRepository extends JpaRepository<Module, Integer> {
+    List<Module> findByCohortIdOrderByOrderIndexAsc(Integer cohortId);
 }

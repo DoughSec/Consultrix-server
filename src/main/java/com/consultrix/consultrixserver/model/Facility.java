@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Facility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id")
