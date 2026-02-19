@@ -25,7 +25,7 @@ public class Student extends User {
 
     // NOT_STARTED / IN_PROGRESS / COMPLETED
     @Column(name = "pipeline_stage", nullable = false)
-    private String pipeLineStage = "NOT_STARTED";
+    private String pipelineStage = "NOT_STARTED";
 
     // NONE / SCREEN / TECHNICAL / FINAL
     @Column(name = "interview_stage", nullable = false)
