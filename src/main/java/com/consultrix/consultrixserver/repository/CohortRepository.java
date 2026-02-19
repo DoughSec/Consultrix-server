@@ -11,6 +11,4 @@ public interface CohortRepository extends JpaRepository<Cohort, Long> {
     List<Cohort> findByStatus(String status);
     List<Cohort> findByFacilityId(int facilityId);
     List<Cohort> findByPrimaryInstructorId(int primaryInstructorUserId);
-
-
 }
