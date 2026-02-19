@@ -25,7 +25,7 @@ public class Cohort {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "primary_instructor_user_id")
-    private Instructor instructor;
+    private Instructor primaryInstructor;
 
     @Column(name = "name", nullable = false)
     private String name;
