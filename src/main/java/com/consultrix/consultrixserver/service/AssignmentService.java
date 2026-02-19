@@ -35,6 +35,16 @@ public class AssignmentService {
     public List<Assignment> getAll() {
         return AssignmentRepository.findAll();
     }
+
+    //getAssignmentByModule
+    public List<Assignment> getByModule(Assignment assignment) {
+        if (assignment == null || assignment.getModule() == null || assignment.getModule().getId() == null) {
+            throw new IllegalArgumentException("Assignment must include a module with an id");
+        }
+        Integer moduleId = assignment.getModule().getId();
+        return AssignmentRepository.findByModuleId(moduleId);
+    }
+
     //update
     public Assignment update(Integer id, Assignment updated) {
         //get the already existing assignment
