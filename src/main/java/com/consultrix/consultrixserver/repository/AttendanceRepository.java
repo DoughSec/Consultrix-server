@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
-    List<Attendance> findByStudentId(int studentUserId);
-    List<Attendance> findByCohortId(int cohortId);
+public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
+    List<Attendance> findByStudentId(Integer studentUserId);
+    List<Attendance> findByCohortId(Integer cohortId);
 
-    Optional<Attendance> findByCohortIdAndStudentIdAndAttendanceDate(int cohortId, int studentUserId, LocalDate attendanceDate);
+    Optional<Attendance> findByCohortIdAndStudentIdAndAttendanceDate(Integer cohortId, Integer studentUserId, LocalDate attendanceDate);
 }

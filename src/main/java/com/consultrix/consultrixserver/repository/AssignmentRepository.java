@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
-    List<Assignment> findByModuleId(int moduleId);
+public interface AssignmentRepository extends JpaRepository<Assignment, Integer> {
+    List<Assignment> findByModuleId(Integer moduleId);
 }

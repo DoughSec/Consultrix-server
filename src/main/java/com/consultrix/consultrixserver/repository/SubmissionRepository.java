@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SubmissionRepository extends JpaRepository<Submission, Long> {
-    List<Submission> findByAssignmentId(int assignmentId);
-    List<Submission> findByStudentId(int studentUserId);
+public interface SubmissionRepository extends JpaRepository<Submission, Integer> {
+    List<Submission> findByAssignmentId(Integer assignmentId);
+    List<Submission> findByStudentId(Integer studentUserId);
     List<Submission> findByStatus(String status);
-    Optional<Submission> findByAssignmentIdAndStudentId(int assignmentId, int studentUserId);
+    Optional<Submission> findByAssignmentIdAndStudentId(Integer assignmentId, Integer studentUserId);
 }

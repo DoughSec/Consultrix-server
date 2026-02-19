@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CohortRepository extends JpaRepository<Cohort, Long> {
+public interface CohortRepository extends JpaRepository<Cohort, Integer> {
     List<Cohort> findByStatus(String status);
-    List<Cohort> findByFacilityId(int facilityId);
-    List<Cohort> findByPrimaryInstructorId(int primaryInstructorUserId);
+    List<Cohort> findByFacilityId(Integer facilityId);
+    List<Cohort> findByPrimaryInstructorId(Integer primaryInstructorUserId);
 }

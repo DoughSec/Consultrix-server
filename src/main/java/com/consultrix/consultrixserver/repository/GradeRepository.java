@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GradeRepository extends JpaRepository<Grade, Long> {
-    List<Grade> findBySubmissionId(int submissionId);
-    List<Grade> findByInstructorId(int instructorUserId);
+public interface GradeRepository extends JpaRepository<Grade, Integer> {
+    List<Grade> findBySubmissionId(Integer submissionId);
+    List<Grade> findByInstructorId(Integer instructorUserId);
 
-    Optional<Grade> findBySubmissionIdAndInstructorId(int submissionId, int instructorUserId);
+    Optional<Grade> findBySubmissionIdAndInstructorId(Integer submissionId, Integer instructorUserId);
 
 }
