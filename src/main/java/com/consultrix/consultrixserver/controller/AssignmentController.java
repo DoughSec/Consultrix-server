@@ -46,7 +46,7 @@ public class AssignmentController {
 
     //update Assignment record
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Assignment updateAssignment(@PathVariable("id") Integer id, @RequestBody Assignment assignment) {
         return assignmentService.update(id, assignment);
     }

@@ -58,7 +58,7 @@ public class AttendanceController {
 
     //update attendance record
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Attendance updateAttendance(@PathVariable("id") Integer id, @RequestBody Attendance attendance) {
          return attendanceService.update(id, attendance);
     }

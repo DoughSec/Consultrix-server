@@ -61,7 +61,7 @@ public class CohortController {
 
     //update Cohort record
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Cohort updateCohort(@PathVariable("id") Integer id, @RequestBody Cohort cohort) {
         return cohortService.update(id, cohort);
     }

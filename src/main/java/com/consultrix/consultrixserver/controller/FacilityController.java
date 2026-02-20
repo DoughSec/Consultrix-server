@@ -57,7 +57,7 @@ public class FacilityController {
 
     //update Facility record
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Facility updateFacility(@PathVariable("id") Integer id, @RequestBody Facility facility) {
         return facilityService.update(id, facility);
     }
