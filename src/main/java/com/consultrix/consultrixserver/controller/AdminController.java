@@ -16,14 +16,12 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-//    //create Admin record
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Admin create(@RequestBody Admin request) {
-//        return adminService.create(
-//                request.getAdminLevel()
-//        );
-//    }
+    //create Admin record
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Admin create(@RequestBody Admin request) {
+        return adminService.create(request);
+    }
 
     //get all Admin records
     @GetMapping

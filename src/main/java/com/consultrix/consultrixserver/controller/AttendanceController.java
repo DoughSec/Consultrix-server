@@ -46,13 +46,13 @@ public class AttendanceController {
     //get attendance records by cohort
     @GetMapping("/cohort/{cohortId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Attendance> getAttendanceByCohort(@PathVariable("id") Integer cohortId) {
+    public List<Attendance> getAttendanceByCohort(@PathVariable("cohortId") Integer cohortId) {
          return attendanceService.listByCohort(cohortId);
     }
 
     //get attendance records by student
     @GetMapping("/student/{studentId}")
-    public List<Attendance> getAttendanceByStudent(@PathVariable("id") Integer studentId) {
+    public List<Attendance> getAttendanceByStudent(@PathVariable("studentId") Integer studentId) {
         return attendanceService.listByStudent(studentId);
     }
 
