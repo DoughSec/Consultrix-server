@@ -83,17 +83,16 @@ public class FacilityService {
     }
 
     // update Facility
-    public Facility update(Integer FacilityId, String status, String city, String state, String country, Integer capacity,
-    String name, String addressLine1) {
+    public Facility update(Integer FacilityId, Facility facility) {
         Facility existing = getById(FacilityId);
 
-        existing.setCity(city);
-        existing.setStatus(status);
-        existing.setState(state);
-        existing.setCountry(country);
-        existing.setCapacity(capacity);
-        existing.setName(name);
-        existing.setAddress_line1(addressLine1);
+        existing.setCity(facility.getCity());
+        existing.setStatus(facility.getStatus());
+        existing.setState(facility.getState());
+        existing.setCountry(facility.getCountry());
+        existing.setCapacity(facility.getCapacity());
+        existing.setName(facility.getName());
+        existing.setAddress_line1(facility.getAddress_line1());
 
         return facilityRepository.save(existing);
     }
