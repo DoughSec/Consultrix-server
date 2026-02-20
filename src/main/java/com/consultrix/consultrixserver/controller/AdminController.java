@@ -39,7 +39,7 @@ public class AdminController {
 
     //update Admin record
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Admin updateAdmin(@PathVariable("id") Integer id, @RequestBody Admin admin) {
         return adminService.update(id, admin);
     }

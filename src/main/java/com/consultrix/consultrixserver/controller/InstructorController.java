@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/consultrix/Instructor")
+@RequestMapping("/consultrix/instructor")
 public class InstructorController {
     private final InstructorService instructorService;
 
@@ -39,7 +39,7 @@ public class InstructorController {
 
     //update Instructor record
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Instructor updateInstructor(@PathVariable("id") Integer id, @RequestBody Instructor instructor) {
         return instructorService.update(id, instructor);
     }
