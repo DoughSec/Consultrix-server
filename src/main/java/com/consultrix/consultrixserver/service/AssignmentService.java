@@ -10,39 +10,39 @@ import java.util.List;
 @Service
 @Transactional
 public class AssignmentService {
-    private final AssignmentRepository AssignmentRepository;
+    private final AssignmentRepository assignmentRepository;
 
-    public AssignmentService(AssignmentRepository AssignmentRepository) {
-        this.AssignmentRepository = AssignmentRepository;
+    public AssignmentService(AssignmentRepository assignmentRepository) {
+        this.assignmentRepository = assignmentRepository;
     }
 
     //create
     public Assignment create(Assignment assignment) {
-        List<Assignment> existing = AssignmentRepository.findByModuleId(assignment.getModule().getId());
+        List<Assignment> existing = assignmentRepository.findByModuleId(assignment.getModule().getId());
         if (existing != null && !existing.isEmpty()) {
             throw new IllegalArgumentException("Assignment already exists");
         }
-        return AssignmentRepository.save(assignment);
+        return assignmentRepository.save(assignment);
     }
 
     //getById
     public Assignment getById(Integer id) {
-        return AssignmentRepository.findById(id)
+        return assignmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Assignment not found")); //lamba function for exception
     }
 
     //getAll
     public List<Assignment> getAll() {
-        return AssignmentRepository.findAll();
+        return assignmentRepository.findAll();
     }
 
     //getAssignmentByModule
-    public List<Assignment> getByModule(Assignment assignment) {
-        if (assignment == null || assignment.getModule() == null || assignment.getModule().getId() == null) {
-            throw new IllegalArgumentException("Assignment must include a module with an id");
-        }
-        Integer moduleId = assignment.getModule().getId();
-        return AssignmentRepository.findByModuleId(moduleId);
+    public List<Assignment> getByModule(Integer moduleId) {
+//        if (assignment == null || assignment.getModule() == null || assignment.getModule().getId() == null) {
+//            throw new IllegalArgumentException("Assignment must include a module with an id");
+//        }
+//        Integer moduleId = assignment.getModule().getId();
+        return assignmentRepository.findByModuleId(moduleId);
     }
 
     //update
@@ -55,11 +55,11 @@ public class AssignmentService {
         existingAssignment.setDescription(updated.getDescription());
         existingAssignment.setUpdatedAt(updated.getUpdatedAt());
 
-        return AssignmentRepository.save(existingAssignment);
+        return assignmentRepository.save(existingAssignment);
     }
 
     //delete
     public void delete(Integer id) {
-        AssignmentRepository.deleteById(id);
+        assignmentRepository.deleteById(id);
     }
 }
