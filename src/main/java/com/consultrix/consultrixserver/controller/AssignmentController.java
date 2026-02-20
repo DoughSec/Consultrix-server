@@ -40,7 +40,7 @@ public class AssignmentController {
     //get Assignment records by module
     @GetMapping("/module/{moduleId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Assignment> getAssignmentByCModule(@PathVariable("moduleId") Integer moduleId) {
+    public List<Assignment> getAssignmentByModule(@PathVariable("moduleId") Integer moduleId) {
         return assignmentService.getByModule(moduleId);
     }
 
