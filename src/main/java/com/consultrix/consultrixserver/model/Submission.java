@@ -30,7 +30,7 @@ public class Submission {
     private Student student;
 
     @Column(name = "submitted_at")
-    private LocalDateTime submittedAt;
+    private LocalDateTime submittedAt = LocalDateTime.now();
 
     @Column(name = "content_url")
     private String contentUrl;
