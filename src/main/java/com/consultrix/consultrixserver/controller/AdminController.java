@@ -1,7 +1,11 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Admin;
+import com.consultrix.consultrixserver.model.dto.adminDTO.AdminRequestDto;
+import com.consultrix.consultrixserver.model.dto.adminDTO.AdminResponseDto;
+import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.AdminService;
+import com.consultrix.consultrixserver.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,16 +15,25 @@ import java.util.List;
 @RequestMapping("/consultrix/admin")
 public class AdminController {
     private final AdminService adminService;
+    private final AuthenticationService authService;
 
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, AuthenticationService authService) {
         this.adminService = adminService;
+        this.authService = authService;
     }
 
     //create Admin record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Admin create(@RequestBody Admin request) {
-        return adminService.create(request);
+    public AdminResponseDto create(@RequestBody AdminRequestDto request) {
+        return adminService.create(
+                request.getUserId(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getStatus(),
+                request.getAdminLevel()
+                );
     }
 
     //get all Admin records
@@ -31,24 +44,25 @@ public class AdminController {
     }
 
     //get Admin by id
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public Admin getAdminById(@PathVariable("id") Integer id) {
-        return adminService.getById(id);
+    public Admin getAdminById(@PathVariable("userId") Integer userId) {
+        return adminService.getById(userId);
     }
 
     //update Admin record
-    @PutMapping("/{id}")
+    @PutMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public Admin updateAdmin(@PathVariable("id") Integer id, @RequestBody Admin admin) {
-        return adminService.update(id, admin);
+    public AdminResponseDto updateAdmin(@RequestBody AdminRequestDto adminRequestDto) {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return adminService.update(currentUserId.intValue(), adminRequestDto);
     }
 
     //delete Admin record
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAdmin(@PathVariable("id") Integer id) {
-        adminService.delete(id);
-    }
+//    @DeleteMapping("/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void deleteAdmin(@PathVariable("id") Integer id) {
+//        adminService.delete(id);
+//    }
 
 }
