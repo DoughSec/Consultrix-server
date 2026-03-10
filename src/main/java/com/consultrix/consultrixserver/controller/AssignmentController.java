@@ -1,8 +1,12 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Assignment;
+import com.consultrix.consultrixserver.model.dto.assignmentDTO.AssignmentRequestDto;
+import com.consultrix.consultrixserver.model.dto.assignmentDTO.AssignmentResponseDto;
+import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.AssignmentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +23,15 @@ public class AssignmentController {
     //create Assignment record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Assignment create(@RequestBody Assignment request) {
-        return assignmentService.create(request);
+    public AssignmentResponseDto create(@RequestBody AssignmentRequestDto request) {
+        return assignmentService.create(
+                request.getModuleId(),
+                request.getTitle(),
+                request.getDescription(),
+                request.getDueDate(),
+                request.getDueTime(),
+                request.getMaxScore()
+        );
     }
 
     //get all Assignment records
@@ -31,10 +42,10 @@ public class AssignmentController {
     }
 
     //get Assignment by id
-    @GetMapping("/{id}")
+    @GetMapping("/{assignmentId}")
     @ResponseStatus(HttpStatus.OK)
-    public Assignment getAssignmentById(@PathVariable("id") Integer id) {
-        return assignmentService.getById(id);
+    public Assignment getAssignmentById(@PathVariable("assignmentId") Integer assignmentId) {
+        return assignmentService.getById(assignmentId);
     }
 
     //get Assignment records by module
@@ -45,17 +56,17 @@ public class AssignmentController {
     }
 
     //update Assignment record
-    @PutMapping("/{id}")
+    @PutMapping("/{assignmentId}")
     @ResponseStatus(HttpStatus.OK)
-    public Assignment updateAssignment(@PathVariable("id") Integer id, @RequestBody Assignment assignment) {
-        return assignmentService.update(id, assignment);
+    public AssignmentResponseDto updateAssignment(@PathVariable("assignmentId") Integer assignmentId, @RequestBody AssignmentRequestDto request) {
+        return assignmentService.update(assignmentId, request);
     }
 
     //delete Assignment record
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{assignmentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAssignment(@PathVariable("id") Integer id) {
-        assignmentService.delete(id);
+    public void deleteAssignment(@PathVariable("assignmentId") Integer assignmentId) {
+        assignmentService.delete(assignmentId);
     }
 
 }
