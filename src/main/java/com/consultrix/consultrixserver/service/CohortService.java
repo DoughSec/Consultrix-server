@@ -2,6 +2,8 @@ package com.consultrix.consultrixserver.service;
 
 import com.consultrix.consultrixserver.model.*;
 import com.consultrix.consultrixserver.model.Cohort;
+import com.consultrix.consultrixserver.model.dto.cohortDTO.CohortRequestDto;
+import com.consultrix.consultrixserver.model.dto.cohortDTO.CohortResponseDto;
 import com.consultrix.consultrixserver.repository.CohortRepository;
 import com.consultrix.consultrixserver.repository.FacilityRepository;
 import com.consultrix.consultrixserver.repository.InstructorRepository;
@@ -30,7 +32,7 @@ public class CohortService {
     }
 
     // create Cohort
-    public Cohort create(
+    public CohortResponseDto create(
             Integer facilityId, Integer primaryInstructorUserId, String name,
             LocalDate startDate, LocalDate endDate, Integer capacity,
             String status
@@ -51,16 +53,28 @@ public class CohortService {
         Instructor primaryInstructor = instructorRepository.findById(primaryInstructorUserId)
                 .orElseThrow(() -> new IllegalArgumentException("Instructor not found: " + primaryInstructorUserId));
 
-        Cohort Cohort = new Cohort();
-        Cohort.setFacility(facility);
-        Cohort.setPrimaryInstructor(primaryInstructor);
-        Cohort.setName(name);
-        Cohort.setStartDate(startDate);
-        Cohort.setEndDate(endDate);
-        Cohort.setCapacity(capacity);
-        Cohort.setStatus(status);
+        Cohort cohort = new Cohort();
+        cohort.setFacility(facility);
+        cohort.setPrimaryInstructor(primaryInstructor);
+        cohort.setName(name);
+        cohort.setStartDate(startDate);
+        cohort.setEndDate(endDate);
+        cohort.setCapacity(capacity);
+        cohort.setStatus(status);
 
-        return cohortRepository.save(Cohort);
+        cohortRepository.save(cohort);
+
+        CohortResponseDto cohortResponseDto = new CohortResponseDto();
+        cohortResponseDto.setCohortId(cohort.getId());
+        cohortResponseDto.setFacilityId(cohort.getFacility().getId());
+        cohortResponseDto.setPrimaryInstructorUserId(cohort.getPrimaryInstructor().getId());
+        cohortResponseDto.setName(cohort.getName());
+        cohortResponseDto.setStartDate(cohort.getStartDate());
+        cohortResponseDto.setEndDate(cohort.getEndDate());
+        cohortResponseDto.setCapacity(cohort.getCapacity());
+        cohortResponseDto.setStatus(cohort.getStatus());
+
+        return cohortResponseDto;
     }
 
     // getAll
@@ -98,7 +112,7 @@ public class CohortService {
     }
 
     // update Cohort
-    public Cohort update(Integer cohortId, Cohort updated) {
+    public CohortResponseDto update(Integer cohortId, CohortRequestDto updated) {
         Cohort existing = getById(cohortId);
 
         existing.setName(updated.getName());
@@ -107,7 +121,20 @@ public class CohortService {
         existing.setCapacity(updated.getCapacity());
         existing.setStatus(updated.getStatus());
 
-        return cohortRepository.save(existing);
+        cohortRepository.save(existing);
+
+        CohortResponseDto cohortResponseDto = new CohortResponseDto();
+        cohortResponseDto.setCohortId(existing.getId());
+        cohortResponseDto.setFacilityId(existing.getFacility().getId());
+        cohortResponseDto.setName(existing.getName());
+        cohortResponseDto.setPrimaryInstructorUserId(existing.getPrimaryInstructor().getId());
+        cohortResponseDto.setName(existing.getName());
+        cohortResponseDto.setStartDate(existing.getStartDate());
+        cohortResponseDto.setEndDate(existing.getEndDate());
+        cohortResponseDto.setCapacity(existing.getCapacity());
+        cohortResponseDto.setStatus(existing.getStatus());
+
+        return cohortResponseDto;
     }
 
     // delete Cohort

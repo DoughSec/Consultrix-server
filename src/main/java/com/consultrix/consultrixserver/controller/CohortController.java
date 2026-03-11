@@ -1,6 +1,8 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Cohort;
+import com.consultrix.consultrixserver.model.dto.cohortDTO.CohortRequestDto;
+import com.consultrix.consultrixserver.model.dto.cohortDTO.CohortResponseDto;
 import com.consultrix.consultrixserver.service.CohortService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,10 @@ public class CohortController {
     //create Cohort record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cohort create(@RequestBody Cohort request) {
+    public CohortResponseDto create(@RequestBody CohortRequestDto request) {
         return cohortService.create(
-                request.getFacility().getId(),
-                request.getPrimaryInstructor().getId(),
+                request.getFacilityId(),
+                request.getPrimaryInstructorUserId(),
                 request.getName(),
                 request.getStartDate(),
                 request.getEndDate(),
@@ -39,10 +41,10 @@ public class CohortController {
     }
 
     //get Cohort by id
-    @GetMapping("/{id}")
+    @GetMapping("/{cohortId}")
     @ResponseStatus(HttpStatus.OK)
-    public Cohort getCohortById(@PathVariable("id") Integer id) {
-        return cohortService.getById(id);
+    public Cohort getCohortById(@PathVariable("cohortId") Integer cohortId) {
+        return cohortService.getById(cohortId);
     }
 
     //get Cohort records by status
@@ -60,17 +62,17 @@ public class CohortController {
     }
 
     //update Cohort record
-    @PutMapping("/{id}")
+    @PutMapping("/{cohortId}")
     @ResponseStatus(HttpStatus.OK)
-    public Cohort updateCohort(@PathVariable("id") Integer id, @RequestBody Cohort cohort) {
-        return cohortService.update(id, cohort);
+    public CohortResponseDto updateCohort(@PathVariable("id") Integer cohortId, @RequestBody CohortRequestDto cohort) {
+        return cohortService.update(cohortId, cohort);
     }
 
     //delete Cohort record
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{cohortId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCohort(@PathVariable("id") Integer id) {
-        cohortService.delete(id);
+    public void deleteCohort(@PathVariable("cohortId") Integer cohortId) {
+        cohortService.delete(cohortId);
     }
 
 }
