@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
-    boolean findByNameIgnoreCase(String name);
+    Organization findByNameIgnoreCase(String name);
 }
