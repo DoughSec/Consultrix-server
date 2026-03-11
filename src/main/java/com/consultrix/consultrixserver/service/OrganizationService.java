@@ -1,6 +1,8 @@
 package com.consultrix.consultrixserver.service;
 
 import com.consultrix.consultrixserver.model.Organization;
+import com.consultrix.consultrixserver.model.dto.organizationDTO.OrganizationRequestDto;
+import com.consultrix.consultrixserver.model.dto.organizationDTO.OrganizationResponseDto;
 import com.consultrix.consultrixserver.repository.OrganizationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,30 @@ public class OrganizationService {
     }
 
     //create
-    public Organization create(Organization org) {
-        if(organizationRepository.findByNameIgnoreCase(org.getName())) {
+    public OrganizationResponseDto create(String name, String type, String contactEmail) {
+
+        Organization existing = organizationRepository.findByNameIgnoreCase(name);
+
+        if(existing != null) {
             throw new IllegalArgumentException("Organization already exists");
         }
-        return organizationRepository.save(org);
+
+        Organization org = new Organization();
+        org.setName(name);
+        org.setType(type);
+        org.setContactEmail(contactEmail);
+
+        organizationRepository.save(org);
+
+        OrganizationResponseDto responseDto = new OrganizationResponseDto();
+        responseDto.setOrganizationId(org.getId());
+        responseDto.setName(org.getName());
+        responseDto.setType(org.getType());
+        responseDto.setContactEmail(org.getContactEmail());
+
+        return responseDto;
     }
+
     //getById
     public Organization getById(Integer id) {
         return organizationRepository.findById(id)
@@ -33,8 +53,9 @@ public class OrganizationService {
     public List<Organization> getAll() {
         return organizationRepository.findAll();
     }
+
     //update
-    public Organization update(Integer id, Organization updated) {
+    public OrganizationResponseDto update(Integer id, OrganizationRequestDto updated) {
         //get the already existing org
         Organization existingOrg = getById(id);
 
@@ -43,7 +64,15 @@ public class OrganizationService {
         existingOrg.setType(updated.getType());
         existingOrg.setContactEmail(updated.getContactEmail());
 
-        return organizationRepository.save(existingOrg);
+        organizationRepository.save(existingOrg);
+
+        OrganizationResponseDto responseDto = new OrganizationResponseDto();
+        responseDto.setOrganizationId(existingOrg.getId());
+        responseDto.setName(existingOrg.getName());
+        responseDto.setType(existingOrg.getType());
+        responseDto.setContactEmail(existingOrg.getContactEmail());
+
+        return responseDto;
     }
 
     //delete
