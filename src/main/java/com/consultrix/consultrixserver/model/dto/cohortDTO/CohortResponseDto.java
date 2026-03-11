@@ -14,7 +14,7 @@ public class CohortResponseDto {
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Integer capacity = 0;
+    private Integer capacity;
     // RECRUITING / INTERVIEWING / ACTIVE / COMPLETED / ARCHIVED
     private String status;
 }

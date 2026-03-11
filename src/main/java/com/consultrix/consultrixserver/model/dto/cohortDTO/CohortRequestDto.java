@@ -9,10 +9,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class CohortRequestDto {
+    private Integer facilityId;
+    private Integer primaryInstructorUserId;
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Integer capacity = 0;
+    private Integer capacity;
     // RECRUITING / INTERVIEWING / ACTIVE / COMPLETED / ARCHIVED
     private String status;
 }
