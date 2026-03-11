@@ -2,6 +2,8 @@ package com.consultrix.consultrixserver.service;
 
 import com.consultrix.consultrixserver.model.Facility;
 import com.consultrix.consultrixserver.model.Organization;
+import com.consultrix.consultrixserver.model.dto.facilityDTO.FacilityRequestDto;
+import com.consultrix.consultrixserver.model.dto.facilityDTO.FacilityResponseDto;
 import com.consultrix.consultrixserver.repository.FacilityRepository;
 import com.consultrix.consultrixserver.repository.OrganizationRepository;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class FacilityService {
     }
 
     // create Facility
-    public Facility create(
+    public FacilityResponseDto create(
             Integer organizationId, String name, String addressLine1,
             String city, String state, String country,
             Integer capacity, LocalDate leaseStartDate, LocalDate leaseEndDate
@@ -54,7 +56,21 @@ public class FacilityService {
         facility.setLeaseStartDate(leaseStartDate);
         facility.setLeaseEndDate(leaseEndDate);
 
-        return facilityRepository.save(facility);
+        facilityRepository.save(facility);
+
+        FacilityResponseDto facilityResponseDto = new FacilityResponseDto();
+        facilityResponseDto.setFacilityId(facility.getId());
+        facilityResponseDto.setOrganizationId(facility.getOrganization().getId());
+        facilityResponseDto.setName(facility.getName());
+        facilityResponseDto.setAddress_line1(facility.getAddress_line1());
+        facilityResponseDto.setCity(facility.getCity());
+        facilityResponseDto.setState(facility.getState());
+        facilityResponseDto.setCountry(facility.getCountry());
+        facilityResponseDto.setCapacity(facility.getCapacity());
+        facilityResponseDto.setLeaseStartDate(facility.getLeaseStartDate());
+        facilityResponseDto.setLeaseEndDate(facility.getLeaseEndDate());
+
+        return facilityResponseDto;
     }
 
     // getAll
@@ -83,7 +99,7 @@ public class FacilityService {
     }
 
     // update Facility
-    public Facility update(Integer FacilityId, Facility facility) {
+    public FacilityResponseDto update(Integer FacilityId, FacilityRequestDto facility) {
         Facility existing = getById(FacilityId);
 
         existing.setCity(facility.getCity());
@@ -94,7 +110,20 @@ public class FacilityService {
         existing.setName(facility.getName());
         existing.setAddress_line1(facility.getAddress_line1());
 
-        return facilityRepository.save(existing);
+        facilityRepository.save(existing);
+
+        FacilityResponseDto facilityResponseDto = new FacilityResponseDto();
+        facilityResponseDto.setFacilityId(existing.getId());
+        facilityResponseDto.setOrganizationId(existing.getOrganization().getId());
+        facilityResponseDto.setName(existing.getName());
+        facilityResponseDto.setAddress_line1(existing.getAddress_line1());
+        facilityResponseDto.setState(existing.getState());
+        facilityResponseDto.setCountry(existing.getCountry());
+        facilityResponseDto.setCapacity(existing.getCapacity());
+        facilityResponseDto.setLeaseStartDate(existing.getLeaseStartDate());
+        facilityResponseDto.setLeaseEndDate(existing.getLeaseEndDate());
+
+        return facilityResponseDto;
     }
 
     // delete Facility

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class FacilityRequestDto {
+    private Integer organizationId;
     private String name;
     private String address_line1;
     private String city;

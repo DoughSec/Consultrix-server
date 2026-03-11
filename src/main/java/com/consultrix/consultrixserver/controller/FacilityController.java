@@ -1,6 +1,8 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Facility;
+import com.consultrix.consultrixserver.model.dto.facilityDTO.FacilityRequestDto;
+import com.consultrix.consultrixserver.model.dto.facilityDTO.FacilityResponseDto;
 import com.consultrix.consultrixserver.service.FacilityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +22,9 @@ public class FacilityController {
     //create Facility record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Facility create(@RequestBody Facility request) {
+    public FacilityResponseDto create(@RequestBody FacilityRequestDto request) {
         return facilityService.create(
-                request.getOrganization().getId(),
+                request.getOrganizationId(),
                 request.getName(),
                 request.getAddress_line1(),
                 request.getCity(),
@@ -42,10 +44,10 @@ public class FacilityController {
     }
 
     //get Facility by id
-    @GetMapping("/{id}")
+    @GetMapping("/{facilityId}")
     @ResponseStatus(HttpStatus.OK)
-    public Facility getFacilityById(@PathVariable("id") Integer id) {
-        return facilityService.getById(id);
+    public Facility getFacilityById(@PathVariable("facilityId") Integer facilityId) {
+        return facilityService.getById(facilityId);
     }
 
     //get Facility records by status
@@ -56,17 +58,17 @@ public class FacilityController {
     }
 
     //update Facility record
-    @PutMapping("/{id}")
+    @PutMapping("/{facilityId}")
     @ResponseStatus(HttpStatus.OK)
-    public Facility updateFacility(@PathVariable("id") Integer id, @RequestBody Facility facility) {
-        return facilityService.update(id, facility);
+    public FacilityResponseDto updateFacility(@PathVariable("facilityId") Integer facilityId, @RequestBody FacilityRequestDto facility) {
+        return facilityService.update(facilityId, facility);
     }
 
     //delete Facility record
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{facilityId")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFacility(@PathVariable("id") Integer id) {
-        facilityService.delete(id);
+    public void deleteFacility(@PathVariable("facilityId") Integer facilityId) {
+        facilityService.delete(facilityId);
     }
 
 }
