@@ -1,6 +1,8 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Attendance;
+import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceRequestDto;
+import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceResponseDto;
 import com.consultrix.consultrixserver.service.AttendanceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,10 @@ public class AttendanceController {
     //create attendance record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Attendance create(@RequestBody Attendance request) {
+    public AttendanceResponseDto create(@RequestBody AttendanceRequestDto request) {
          return attendanceService.create(
-                 request.getCohort().getId(),
-                 request.getStudent().getId(),
+                 request.getCohortId(),
+                 request.getStudentUserId(),
                  request.getAttendanceDate(),
                  request.getStatus(),
                  request.getNote()
@@ -37,10 +39,10 @@ public class AttendanceController {
     }
 
     //get attendance by id
-    @GetMapping("/{id}")
+    @GetMapping("/{attendanceId}")
     @ResponseStatus(HttpStatus.OK)
-    public Attendance getAttendanceById(@PathVariable("id") Integer id) {
-         return attendanceService.getById(id);
+    public Attendance getAttendanceById(@PathVariable("attendanceId") Integer attendanceId) {
+         return attendanceService.getById(attendanceId);
     }
 
     //get attendance records by cohort
@@ -57,17 +59,17 @@ public class AttendanceController {
     }
 
     //update attendance record
-    @PutMapping("/{id}")
+    @PutMapping("/{attendanceId}")
     @ResponseStatus(HttpStatus.OK)
-    public Attendance updateAttendance(@PathVariable("id") Integer id, @RequestBody Attendance attendance) {
-         return attendanceService.update(id, attendance);
+    public AttendanceResponseDto updateAttendance(@PathVariable("attendanceId") Integer attendanceId, @RequestBody AttendanceRequestDto attendance) {
+         return attendanceService.update(attendanceId, attendance);
     }
 
     //delete attendance record
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{attendanceId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAttendance(@PathVariable("id") Integer id) {
-         attendanceService.delete(id);
+    public void deleteAttendance(@PathVariable("attendanceId") Integer attendanceId) {
+         attendanceService.delete(attendanceId);
     }
 
 }
