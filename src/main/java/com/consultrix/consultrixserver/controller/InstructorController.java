@@ -1,8 +1,12 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Instructor;
+import com.consultrix.consultrixserver.model.dto.instructorDTO.InstructorProfileRequestDto;
+import com.consultrix.consultrixserver.model.dto.instructorDTO.InstructorProfileResponseDto;
+import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.InstructorService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,36 +23,51 @@ public class InstructorController {
     //create Instructor record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Instructor create(@RequestBody Instructor request) {
-        return instructorService.create(request);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public InstructorProfileResponseDto create(@RequestBody InstructorProfileRequestDto request) {
+        return instructorService.create(
+                request.getUserId(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getStatus(),
+                request.getEmail(),
+                request.getTitle(),
+                request.getSpecialty(),
+                request.getOfficeHours()
+        );
     }
 
     //get all Instructor records
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Instructor> getAll() {
         return instructorService.getAll();
     }
 
     //get Instructor by id
-    @GetMapping("/{id}")
+    @GetMapping("/{instructorId}")
     @ResponseStatus(HttpStatus.OK)
-    public Instructor getInstructorById(@PathVariable("id") Integer id) {
-        return instructorService.getById(id);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Instructor getInstructorById(@PathVariable("instructorId") Integer instructorId) {
+        return instructorService.getById(instructorId);
     }
 
     //update Instructor record
-    @PutMapping("/{id}")
+    @PutMapping("/{instructorId}")
     @ResponseStatus(HttpStatus.OK)
-    public Instructor updateInstructor(@PathVariable("id") Integer id, @RequestBody Instructor instructor) {
-        return instructorService.update(id, instructor);
+    @PreAuthorize("hasRole('ROLE_INSTRUCTOR')")
+    public InstructorProfileResponseDto updateInstructor(@PathVariable("instructorId") Integer instructorId, @RequestBody InstructorProfileRequestDto instructor) {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return instructorService.update(instructorId, currentUserId.intValue(), instructor);
     }
 
     //delete Instructor record
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{instructorId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteInstructor(@PathVariable("id") Integer id) {
-        instructorService.delete(id);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void deleteInstructor(@PathVariable("instructorId") Integer instructorId) {
+        instructorService.delete(instructorId);
     }
 
 }

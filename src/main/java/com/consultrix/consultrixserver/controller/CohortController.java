@@ -5,6 +5,7 @@ import com.consultrix.consultrixserver.model.dto.cohortDTO.CohortRequestDto;
 import com.consultrix.consultrixserver.model.dto.cohortDTO.CohortResponseDto;
 import com.consultrix.consultrixserver.service.CohortService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class CohortController {
     //create Cohort record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CohortResponseDto create(@RequestBody CohortRequestDto request) {
         return cohortService.create(
                 request.getFacilityId(),
@@ -36,6 +38,7 @@ public class CohortController {
     //get all Cohort records
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Cohort> getAll() {
         return cohortService.listAll();
     }
@@ -43,6 +46,7 @@ public class CohortController {
     //get Cohort by id
     @GetMapping("/{cohortId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Cohort getCohortById(@PathVariable("cohortId") Integer cohortId) {
         return cohortService.getById(cohortId);
     }
@@ -50,6 +54,7 @@ public class CohortController {
     //get Cohort records by status
     @GetMapping("/status/{status}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Cohort> getCohortByStatus(@PathVariable("status") String status) {
         return cohortService.listByStatus(status);
     }
@@ -57,6 +62,7 @@ public class CohortController {
     //get Cohort records by facility
     @GetMapping("/facility/{facilityId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Cohort> getCohortByFacility(@PathVariable("facilityId") Integer facilityId) {
         return cohortService.listByFacility(facilityId);
     }
@@ -64,6 +70,7 @@ public class CohortController {
     //update Cohort record
     @PutMapping("/{cohortId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CohortResponseDto updateCohort(@PathVariable("id") Integer cohortId, @RequestBody CohortRequestDto cohort) {
         return cohortService.update(cohortId, cohort);
     }
@@ -71,6 +78,7 @@ public class CohortController {
     //delete Cohort record
     @DeleteMapping("/{cohortId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCohort(@PathVariable("cohortId") Integer cohortId) {
         cohortService.delete(cohortId);
     }

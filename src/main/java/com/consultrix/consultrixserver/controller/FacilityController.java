@@ -5,6 +5,7 @@ import com.consultrix.consultrixserver.model.dto.facilityDTO.FacilityRequestDto;
 import com.consultrix.consultrixserver.model.dto.facilityDTO.FacilityResponseDto;
 import com.consultrix.consultrixserver.service.FacilityService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class FacilityController {
     //create Facility record
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public FacilityResponseDto create(@RequestBody FacilityRequestDto request) {
         return facilityService.create(
                 request.getOrganizationId(),
@@ -39,6 +41,7 @@ public class FacilityController {
     //get all Facility records
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Facility> getAll() {
         return facilityService.listAll();
     }
@@ -46,6 +49,7 @@ public class FacilityController {
     //get Facility by id
     @GetMapping("/{facilityId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Facility getFacilityById(@PathVariable("facilityId") Integer facilityId) {
         return facilityService.getById(facilityId);
     }
@@ -53,6 +57,7 @@ public class FacilityController {
     //get Facility records by status
     @GetMapping("/status/{status}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Facility> getFacilityByStatus(@PathVariable("status") String status) {
         return facilityService.listByStatus(status);
     }
@@ -60,6 +65,7 @@ public class FacilityController {
     //update Facility record
     @PutMapping("/{facilityId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public FacilityResponseDto updateFacility(@PathVariable("facilityId") Integer facilityId, @RequestBody FacilityRequestDto facility) {
         return facilityService.update(facilityId, facility);
     }
@@ -67,6 +73,7 @@ public class FacilityController {
     //delete Facility record
     @DeleteMapping("/{facilityId")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteFacility(@PathVariable("facilityId") Integer facilityId) {
         facilityService.delete(facilityId);
     }

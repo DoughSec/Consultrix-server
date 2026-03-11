@@ -25,15 +25,14 @@ public class UserService {
     public User register(
             String firstName, String lastName, String email, String password
     ) {
-//        User user = new User();
-//        user.setFirstName(firstName);
-//        user.setLastName(lastName);
-//        user.setEmail(email);
-//        user.setPasswordHash(this.passwordEncoder.encode(password));
-//        user.setRole("ROLE_USER");
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPasswordHash(this.passwordEncoder.encode(password));
+        user.setRole("ROLE_USER");
 
-//        return userRepository.save(user);
-        return null;
+        return userRepository.save(user);
     }
 
 }
