@@ -3,6 +3,8 @@ package com.consultrix.consultrixserver.service;
 import com.consultrix.consultrixserver.model.Attendance;
 import com.consultrix.consultrixserver.model.Cohort;
 import com.consultrix.consultrixserver.model.Student;
+import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceRequestDto;
+import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceResponseDto;
 import com.consultrix.consultrixserver.repository.AttendanceRepository;
 import com.consultrix.consultrixserver.repository.CohortRepository;
 import com.consultrix.consultrixserver.repository.StudentRepository;
@@ -31,21 +33,21 @@ public class AttendanceService {
     }
 
     // create attendance
-    public Attendance create(Integer cohortId, Integer studentId, LocalDate attendanceDate, String status, String note) {
-        if (cohortId == null || studentId == null || attendanceDate == null) {
+    public AttendanceResponseDto create(Integer cohortId, Integer studentUserId, LocalDate attendanceDate, String status, String note) {
+        if (cohortId == null || studentUserId == null || attendanceDate == null) {
             throw new IllegalArgumentException("cohortId, studentId, and attendanceDate are required");
         }
 
         // Prevent duplicates for same student+cohort+date
-        if (attendanceRepository.findByCohortIdAndStudentIdAndAttendanceDate(cohortId, studentId, attendanceDate)) {
+        if (attendanceRepository.findByCohortIdAndStudentIdAndAttendanceDate(cohortId, studentUserId, attendanceDate)) {
             throw new IllegalArgumentException("Attendance already exists for this student on this date in this cohort");
         }
 
         Cohort cohort = cohortRepository.findById(cohortId)
                 .orElseThrow(() -> new IllegalArgumentException("Cohort not found: " + cohortId));
 
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+        Student student = studentRepository.findById(studentUserId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentUserId));
 
         Attendance attendance = new Attendance();
         attendance.setCohort(cohort);
@@ -54,7 +56,17 @@ public class AttendanceService {
         attendance.setStatus(status);
         attendance.setNote(note);
 
-        return attendanceRepository.save(attendance);
+        attendanceRepository.save(attendance);
+
+        AttendanceResponseDto attendanceResponseDto = new AttendanceResponseDto();
+        attendanceResponseDto.setAttendanceId(attendance.getId());
+        attendanceResponseDto.setCohortId(attendance.getCohort().getId());
+        attendanceResponseDto.setStudentUserId(attendance.getStudent().getId());
+        attendanceResponseDto.setAttendanceDate(attendance.getAttendanceDate());
+        attendanceResponseDto.setStatus(attendance.getStatus());
+        attendanceResponseDto.setNote(attendance.getNote());
+
+        return attendanceResponseDto;
     }
 
     // getAll
@@ -92,13 +104,24 @@ public class AttendanceService {
     }
 
     // update Attendance
-    public Attendance update(Integer attendanceId, Attendance updated) {
+    public AttendanceResponseDto update(Integer attendanceId, AttendanceRequestDto updated) {
         Attendance existing = getById(attendanceId);
 
+        existing.setAttendanceDate(updated.getAttendanceDate());
         existing.setStatus(updated.getStatus());
         existing.setNote(updated.getNote());
 
-        return attendanceRepository.save(existing);
+        attendanceRepository.save(existing);
+
+        AttendanceResponseDto attendanceResponseDto = new AttendanceResponseDto();
+        attendanceResponseDto.setAttendanceId(existing.getId());
+        attendanceResponseDto.setCohortId(existing.getCohort().getId());
+        attendanceResponseDto.setStudentUserId(existing.getStudent().getId());
+        attendanceResponseDto.setAttendanceDate(existing.getAttendanceDate());
+        attendanceResponseDto.setStatus(existing.getStatus());
+        attendanceResponseDto.setNote(existing.getNote());
+
+        return attendanceResponseDto;
     }
 
     // delete attendance
