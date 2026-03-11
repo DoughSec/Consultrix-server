@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type")
-public abstract class User {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +40,9 @@ public abstract class User {
     // ACTIVE // INACTIVE // SUSPENDED
     @Column(name = "status", nullable = false)
     private String status = "ACTIVE";
+
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @CreationTimestamp // Automatically set the creation timestamp when the entity is persisted
     @Column(name = "created_at", updatable = false)
