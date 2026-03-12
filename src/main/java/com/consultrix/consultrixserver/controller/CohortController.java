@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/consultrix/cohort")
+@RequestMapping("/consultrix/cohorts")
 public class CohortController {
     private final CohortService cohortService;
 

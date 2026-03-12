@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NotificationRequestDto {
+    private Integer userId;
     private String title;
     private String message;
     private boolean isRead;

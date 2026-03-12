@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/consultrix/assignment")
+@RequestMapping("/consultrix/assignments")
 public class AssignmentController {
     private final AssignmentService assignmentService;
 

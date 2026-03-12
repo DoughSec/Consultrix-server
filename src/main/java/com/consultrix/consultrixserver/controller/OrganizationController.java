@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/consultrix/organization")
+@RequestMapping("/consultrix/organizations")
 public class OrganizationController {
     private final OrganizationService organizationService;
 

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SubmissionRequestDto {
+    private Integer assignmentId;
     private LocalDateTime submittedAt;
     private String contentUrl;
     // SUBMITTED / LATE / MISSING
