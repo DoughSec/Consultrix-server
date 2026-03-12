@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/consultrix/facility")
+@RequestMapping("/consultrix/facilities")
 public class FacilityController {
     private final FacilityService facilityService;
 
@@ -71,7 +71,7 @@ public class FacilityController {
     }
 
     //delete Facility record
-    @DeleteMapping("/{facilityId")
+    @DeleteMapping("/{facilityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteFacility(@PathVariable("facilityId") Integer facilityId) {

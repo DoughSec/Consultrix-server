@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/nomadTrack/auth")
+@RequestMapping("/consultrix/auth")
 public class AuthenticationController {
 
     private final UserService userService;

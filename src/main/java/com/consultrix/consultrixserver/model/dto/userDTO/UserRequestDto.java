@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRequestDto {
+    private Integer organizationId;
     private String firstName;
     private String lastName;
     private String email;

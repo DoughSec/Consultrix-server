@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class ModuleRequestDto {
+    private Integer cohortId;
     private String title;
     private String description;
     private LocalDate startDate;
