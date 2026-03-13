@@ -27,8 +27,11 @@ public class AssignmentService {
     //create
     public AssignmentResponseDto create(Integer moduleId, String title, String description, LocalDate dueDate, LocalDateTime dueTime, BigDecimal maxScore) {
         List<Assignment> existing = assignmentRepository.findByModuleId(moduleId);
-        if (existing != null && !existing.isEmpty()) {
-            throw new IllegalArgumentException("Assignment already exists");
+
+        for(Assignment assignment : existing) {
+            if (assignment.getTitle().equals(title)) {
+                throw new IllegalArgumentException("Assignment already exists");
+            }
         }
 
         Module module = moduleService.getById(moduleId);

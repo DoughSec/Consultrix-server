@@ -11,6 +11,7 @@ public class InstructorProfileResponseDto {
     private String lastName;
     private String email;
     private String status;
+    private String role;
     private String title;
     private String specialty;
     private String officeHours;

@@ -9,8 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class SubmissionRequestDto {
     private Integer assignmentId;
+    private Integer studentUserId;
     private LocalDateTime submittedAt;
     private String contentUrl;
-    // SUBMITTED / LATE / MISSING
-    private String status;
 }

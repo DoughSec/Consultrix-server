@@ -27,13 +27,15 @@ public class InstructorController {
     public InstructorProfileResponseDto create(@RequestBody InstructorProfileRequestDto request) {
         return instructorService.create(
                 request.getUserId(),
+                request.getOrganizationId(),
                 request.getFirstName(),
                 request.getLastName(),
-                request.getStatus(),
                 request.getEmail(),
+                request.getPassword(),
                 request.getTitle(),
                 request.getSpecialty(),
-                request.getOfficeHours()
+                request.getOfficeHours(),
+                request.getStatus()
         );
     }
 
@@ -56,7 +58,7 @@ public class InstructorController {
     //update Instructor record
     @PutMapping("/{instructorId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_INSTRUCTOR')")
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
     public InstructorProfileResponseDto updateInstructor(@PathVariable("instructorId") Integer instructorId, @RequestBody InstructorProfileRequestDto instructor) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         return instructorService.update(instructorId, currentUserId.intValue(), instructor);

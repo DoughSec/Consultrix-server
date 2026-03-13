@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-    List<Student> findCohortById(Integer cohortId);
+    List<Student> findByCohortId(Integer cohortId);
     List<Student> findByPipelineStage(String pipelineStage);
     List<Student> findByGraduationStatus(String graduationStatus);
 }

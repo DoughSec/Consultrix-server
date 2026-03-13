@@ -71,7 +71,7 @@ public class CohortController {
     @PutMapping("/{cohortId}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public CohortResponseDto updateCohort(@PathVariable("id") Integer cohortId, @RequestBody CohortRequestDto cohort) {
+    public CohortResponseDto updateCohort(@PathVariable("cohortId") Integer cohortId, @RequestBody CohortRequestDto cohort) {
         return cohortService.update(cohortId, cohort);
     }
 

@@ -39,7 +39,7 @@ public class AttendanceService {
         }
 
         // Prevent duplicates for same student+cohort+date
-        if (attendanceRepository.findByCohortIdAndStudentIdAndAttendanceDate(cohortId, studentUserId, attendanceDate)) {
+        if (attendanceRepository.existsByCohortIdAndStudentIdAndAttendanceDate(cohortId, studentUserId, attendanceDate)) {
             throw new IllegalArgumentException("Attendance already exists for this student on this date in this cohort");
         }
 

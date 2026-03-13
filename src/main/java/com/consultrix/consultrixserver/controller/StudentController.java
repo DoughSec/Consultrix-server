@@ -3,6 +3,7 @@ package com.consultrix.consultrixserver.controller;
 import com.consultrix.consultrixserver.model.Student;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentRequestDto;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentResponseDto;
+import com.consultrix.consultrixserver.model.dto.studentDTO.StudentPasswordUpdateDto;
 import com.consultrix.consultrixserver.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,12 @@ public class StudentController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public StudentResponseDto create(@RequestBody StudentRequestDto request) {
         return studentService.create(
+                request.getOrganizationId(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getStatus(),
                 request.getCohortId(),
                 request.getGraduationStatus(),
                 request.getPipelineStage(),
@@ -82,6 +89,14 @@ public class StudentController {
     @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
     public StudentResponseDto updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody StudentRequestDto request) {
         return studentService.update(studentId, request);
+    }
+
+    //update Student password
+    @PatchMapping("/{studentId}/password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_ADMIN')")
+    public void updatePassword(@PathVariable("studentId") Integer studentId, @RequestBody StudentPasswordUpdateDto request) {
+        studentService.updatePassword(studentId, request.getNewPassword());
     }
 
     //delete Student record

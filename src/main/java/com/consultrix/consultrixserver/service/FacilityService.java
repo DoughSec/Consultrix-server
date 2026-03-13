@@ -38,9 +38,9 @@ public class FacilityService {
         }
 
         List<Facility> existing = facilityRepository.findByOrganizationId(organizationId);
-        if(existing != null) {
-            throw new IllegalArgumentException("Facility already exists!");
-        }
+//        if(existing != null) {
+//            throw new IllegalArgumentException("Facility already exists!");
+//        }
 
         Organization org = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new IllegalArgumentException("Organization not found: " + organizationId));
