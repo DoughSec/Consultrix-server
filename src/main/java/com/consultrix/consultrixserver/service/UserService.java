@@ -49,7 +49,7 @@ public class UserService {
         user.setEmail(email);
         user.setPasswordHash(this.passwordEncoder.encode(password));
         user.setStatus(status != null ? status : "ACTIVE");
-        user.setRole("ROLE_USER");
+        user.setRole("ROLE_STUDENT");
 
         userRepository.save(user);
 
@@ -66,14 +66,14 @@ public class UserService {
 
     // registration for users (kept for backward compatibility)
     public User register(
-            String firstName, String lastName, String email, String password
+            String firstName, String lastName, String email, String password, String role
     ) {
         User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
         user.setPasswordHash(this.passwordEncoder.encode(password));
-        user.setRole("ROLE_USER");
+        user.setRole(role != null ? role : "ROLE_STUDENT");
 
         return userRepository.save(user);
     }

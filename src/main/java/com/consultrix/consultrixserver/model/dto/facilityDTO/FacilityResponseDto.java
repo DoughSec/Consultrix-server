@@ -15,7 +15,7 @@ public class FacilityResponseDto {
     private String city;
     private String state;
     private String country;
-    private Integer capacity = 0;
+    private Integer capacity;
     private LocalDate leaseStartDate;
     private LocalDate leaseEndDate;
     // ACTIVE / PLANNED / CLOSED

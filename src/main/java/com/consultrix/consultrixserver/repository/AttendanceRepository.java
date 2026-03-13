@@ -13,5 +13,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
     List<Attendance> findByStudentId(Integer studentUserId);
     List<Attendance> findByCohortId(Integer cohortId);
 
-    boolean findByCohortIdAndStudentIdAndAttendanceDate(Integer cohortId, Integer studentUserId, LocalDate attendanceDate);
+    boolean existsByCohortIdAndStudentIdAndAttendanceDate(Integer cohortId, Integer studentUserId, LocalDate attendanceDate);
 }

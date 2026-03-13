@@ -44,4 +44,15 @@ public class SecurityUtils {
         return auth.getAuthorities().stream()
                 .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN"));
     }
+
+    public static boolean isInstructorOrAdmin() {
+
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        assert auth != null;
+        return auth.getAuthorities().stream()
+                .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN")
+                        || Objects.equals(a.getAuthority(), "ROLE_INSTRUCTOR"));
+    }
 }

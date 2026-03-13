@@ -10,6 +10,12 @@ import java.time.LocalDate;
 @Setter
 public class StudentRequestDto {
     private Integer cohortId;
+    private Integer organizationId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
+    private String status;
     // ACTIVE / COMPLETED / WITHDRAWN
     private String graduationStatus;
     // NOT_STARTED / IN_PROGRESS / COMPLETED

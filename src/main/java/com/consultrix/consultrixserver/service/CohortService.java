@@ -43,9 +43,9 @@ public class CohortService {
 
         // Prevent duplicates for same instructor
         List<Cohort> existing = cohortRepository.findByPrimaryInstructorId(primaryInstructorUserId);
-        if (existing != null) {
-            throw new IllegalArgumentException("Instructor already exists for this cohort");
-        }
+//        if (existing != null) {
+//            throw new IllegalArgumentException("Instructor already exists for this cohort");
+//        }
 
         Facility facility = facilityRepository.findById(facilityId)
                 .orElseThrow(() -> new IllegalArgumentException("Facility not found: " + facilityId));

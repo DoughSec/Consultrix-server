@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @PrimaryKeyJoinColumn(name = "user_id") //this is the foreign key that references the user_id in the users table
 public class Student extends User {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cohort_id")
     private Cohort cohort;
 

@@ -26,7 +26,8 @@ public class AuthenticationController {
                 request.getFirstName(),
                 request.getLastName(),
                 request.getEmail(),
-                request.getPassword()
+                request.getPassword(),
+                request.getRole()
         );
     }
 

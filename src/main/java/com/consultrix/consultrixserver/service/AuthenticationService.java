@@ -38,10 +38,10 @@ public class AuthenticationService {
 
         String token = JwtUtils.createJWT(
                 String.valueOf(user.getId()), // token id
-                "nomadTrack",                  // issuer
+                "consultrix",                  // issuer
                 user.getEmail(),               // subject
-                TTL_MILLIS
-//                user.getRole()                 // role claim
+                TTL_MILLIS,
+                user.getRole()                 // role claim
         );
 
         return new LoginResponseDto(token, TTL_MILLIS / 1000);

@@ -1,11 +1,14 @@
 package com.consultrix.consultrixserver.service;
 
 import com.consultrix.consultrixserver.model.Cohort;
+import com.consultrix.consultrixserver.model.Organization;
 import com.consultrix.consultrixserver.model.Student;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentRequestDto;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentResponseDto;
 import com.consultrix.consultrixserver.repository.CohortRepository;
+import com.consultrix.consultrixserver.repository.OrganizationRepository;
 import com.consultrix.consultrixserver.repository.StudentRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +21,21 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final CohortRepository cohortRepository;
+    private final OrganizationRepository orgRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public StudentService(StudentRepository studentRepository, CohortRepository cohortRepository) {
+    public StudentService(StudentRepository studentRepository, CohortRepository cohortRepository, OrganizationRepository orgRepository
+    , PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.cohortRepository = cohortRepository;
+        this.orgRepository = orgRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // create Student
     public StudentResponseDto create(
+            Integer organizationId, String firstName, String lastName, String email,
+            String password, String status,
             Integer cohortId, String graduationStatus, String pipelineStage,
             String interviewStage, String clientName, LocalDate placementStartDate,
             String resumeUrl, String notes
@@ -37,7 +47,17 @@ public class StudentService {
         Cohort cohort = cohortRepository.findById(cohortId)
                 .orElseThrow(() -> new IllegalArgumentException("Cohort not found: " + cohortId));
 
+        Organization org = orgRepository.findById(organizationId)
+                .orElseThrow(() -> new IllegalArgumentException("Organization not found: " + organizationId));
+
         Student student = new Student();
+        student.setOrganization(org);
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        student.setEmail(email);
+        student.setPasswordHash(this.passwordEncoder.encode(password));
+        student.setStatus(status);
+        student.setRole("ROLE_STUDENT");
         student.setCohort(cohort);
         student.setGraduationStatus(graduationStatus);
         student.setPipelineStage(pipelineStage);
@@ -75,7 +95,7 @@ public class StudentService {
         if (cohortId == null) {
             throw new IllegalArgumentException("cohortId is required");
         }
-        return studentRepository.findCohortById(cohortId);
+        return studentRepository.findByCohortId(cohortId);
     }
 
     // getByPipelineStage
@@ -110,6 +130,19 @@ public class StudentService {
     public StudentResponseDto update(Integer studentId, StudentRequestDto updated) {
         Student existing = getById(studentId);
 
+        Organization org = orgRepository.findById(updated.getOrganizationId())
+                .orElseThrow(() -> new IllegalArgumentException("Organization not found: " + updated.getOrganizationId()));
+
+        Cohort cohort = cohortRepository.findById(updated.getCohortId())
+                .orElseThrow(() -> new IllegalArgumentException("Cohort not found: " + updated.getCohortId()));
+
+        existing.setOrganization(org);
+        existing.setFirstName(updated.getFirstName());
+        existing.setLastName(updated.getLastName());
+        existing.setEmail(updated.getEmail());
+        existing.setPasswordHash(this.passwordEncoder.encode(updated.getPassword()));
+        existing.setStatus(updated.getStatus());
+        existing.setCohort(cohort);
         existing.setGraduationStatus(updated.getGraduationStatus());
         existing.setPipelineStage(updated.getPipelineStage());
         existing.setInterviewStage(updated.getInterviewStage());
@@ -122,7 +155,7 @@ public class StudentService {
 
         StudentResponseDto responseDto = new StudentResponseDto();
         responseDto.setUserId(existing.getId());
-        responseDto.setCohortId(existing.getCohort() != null ? existing.getCohort().getId() : null);
+        responseDto.setCohortId(existing.getCohort().getId());
         responseDto.setGraduationStatus(existing.getGraduationStatus());
         responseDto.setPipelineStage(existing.getPipelineStage());
         responseDto.setInterviewStage(existing.getInterviewStage());
@@ -143,5 +176,15 @@ public class StudentService {
             throw new IllegalArgumentException("Student not found: " + studentId);
         }
         studentRepository.deleteById(studentId);
+    }
+
+    // update Student password
+    public void updatePassword(Integer studentId, String newPassword) {
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new IllegalArgumentException("New password is required");
+        }
+        Student existing = getById(studentId);
+        existing.setPasswordHash(passwordEncoder.encode(newPassword));
+        studentRepository.save(existing);
     }
 }

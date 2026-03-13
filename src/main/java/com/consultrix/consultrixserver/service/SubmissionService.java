@@ -32,8 +32,28 @@ public class SubmissionService {
         this.studentRepository = studentRepository;
     }
 
+    // Determine submission status based on submittedAt vs assignment deadline
+    private String resolveStatus(Assignment assignment, LocalDateTime submittedAt) {
+        if (submittedAt == null) {
+            return "MISSING";
+        }
+
+        // Use dueTime if available, otherwise fall back to end-of-day on dueDate
+        LocalDateTime deadline = assignment.getDueTime() != null
+                ? assignment.getDueTime()
+                : (assignment.getDueDate() != null
+                    ? assignment.getDueDate().atTime(23, 59, 59)
+                    : null);
+
+        if (deadline != null && submittedAt.isAfter(deadline)) {
+            return "LATE";
+        }
+
+        return "SUBMITTED";
+    }
+
     // create Submission
-    public SubmissionResponseDto create(Integer assignmentId, Integer studentUserId, LocalDateTime submittedAt, String contentUrl, String status) {
+    public SubmissionResponseDto create(Integer assignmentId, Integer studentUserId, LocalDateTime submittedAt, String contentUrl) {
         if (assignmentId == null || studentUserId == null) {
             throw new IllegalArgumentException("assignmentId and studentUserId are required");
         }
@@ -49,12 +69,14 @@ public class SubmissionService {
         Student student = studentRepository.findById(studentUserId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentUserId));
 
+        LocalDateTime effectiveSubmittedAt = submittedAt != null ? submittedAt : LocalDateTime.now();
+
         Submission submission = new Submission();
         submission.setAssignment(assignment);
         submission.setStudent(student);
-        submission.setSubmittedAt(submittedAt != null ? submittedAt : LocalDateTime.now());
+        submission.setSubmittedAt(effectiveSubmittedAt);
         submission.setContentUrl(contentUrl);
-        submission.setStatus(status != null ? status : "SUBMITTED");
+        submission.setStatus(resolveStatus(assignment, effectiveSubmittedAt));
 
         submissionRepository.save(submission);
 
@@ -116,9 +138,13 @@ public class SubmissionService {
     public SubmissionResponseDto update(Integer submissionId, SubmissionRequestDto updated) {
         Submission existing = getById(submissionId);
 
-        existing.setSubmittedAt(updated.getSubmittedAt());
+        LocalDateTime effectiveSubmittedAt = updated.getSubmittedAt() != null
+                ? updated.getSubmittedAt()
+                : existing.getSubmittedAt();
+
+        existing.setSubmittedAt(effectiveSubmittedAt);
         existing.setContentUrl(updated.getContentUrl());
-        existing.setStatus(updated.getStatus());
+        existing.setStatus(resolveStatus(existing.getAssignment(), effectiveSubmittedAt));
 
         submissionRepository.save(existing);
 
