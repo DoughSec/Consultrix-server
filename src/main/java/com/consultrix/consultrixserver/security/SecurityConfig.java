@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/consultrix/students/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/submissions/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/notifications/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
+                        .requestMatchers("/consultrix/tickets/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
 
                         // everything else requires authentication
                         .anyRequest().authenticated()
