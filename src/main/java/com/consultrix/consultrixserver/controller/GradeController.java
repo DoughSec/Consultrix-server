@@ -1,8 +1,10 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Grade;
+import com.consultrix.consultrixserver.model.dto.gradeDTO.GradeProfileResponseDto;
 import com.consultrix.consultrixserver.model.dto.gradeDTO.GradeRequestDto;
 import com.consultrix.consultrixserver.model.dto.gradeDTO.GradeResponseDto;
+import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.GradeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,6 +64,15 @@ public class GradeController {
     @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
     public List<Grade> getGradeByInstructor(@PathVariable("instructorUserId") Integer instructorUserId) {
         return gradeService.listByInstructor(instructorUserId);
+    }
+
+    //get current logged in student's grades
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public List<GradeProfileResponseDto> getStudentGrades() {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return gradeService.getMyGrades(currentUserId.intValue());
     }
 
     //update Grade record

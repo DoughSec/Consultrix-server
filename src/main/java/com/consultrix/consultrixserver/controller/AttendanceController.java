@@ -1,8 +1,11 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Attendance;
+import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceProfileResponseDto;
 import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceRequestDto;
 import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceResponseDto;
+import com.consultrix.consultrixserver.model.dto.studentDTO.StudentProfileResponseDto;
+import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.AttendanceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,6 +66,15 @@ public class AttendanceController {
     @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
     public List<Attendance> getAttendanceByStudent(@PathVariable("studentId") Integer studentId) {
         return attendanceService.listByStudent(studentId);
+    }
+
+    //get current logged in student's attendance
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public AttendanceProfileResponseDto getStudentProfileAttendance() {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return attendanceService.getMyAttendance(currentUserId.intValue());
     }
 
     //update attendance record

@@ -3,6 +3,7 @@ package com.consultrix.consultrixserver.service;
 import com.consultrix.consultrixserver.model.Cohort;
 import com.consultrix.consultrixserver.model.Organization;
 import com.consultrix.consultrixserver.model.Student;
+import com.consultrix.consultrixserver.model.dto.studentDTO.StudentProfileResponseDto;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentRequestDto;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentResponseDto;
 import com.consultrix.consultrixserver.repository.CohortRepository;
@@ -124,6 +125,24 @@ public class StudentService {
         }
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+    }
+
+    //getMyStudentProfile
+    @Transactional(readOnly = true)
+    public StudentProfileResponseDto getMyStudentProfile(Integer studentId) {
+        if (studentId == null) {
+            throw new IllegalArgumentException("Must be logged in");
+        }
+        Student student = getById(studentId);
+        StudentProfileResponseDto responseDto = new StudentProfileResponseDto();
+        responseDto.setUserId(student.getId());
+        responseDto.setCohortId(student.getCohort().getId());
+        responseDto.setFirstName(student.getFirstName());
+        responseDto.setLastName(student.getLastName());
+        responseDto.setEmail(student.getEmail());
+        responseDto.setRole(student.getRole());
+
+        return responseDto;
     }
 
     // update Student
