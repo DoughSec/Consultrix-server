@@ -14,4 +14,5 @@ public interface GradeRepository extends JpaRepository<Grade, Integer> {
 
     Optional<Grade> findBySubmissionIdAndInstructorId(Integer submissionId, Integer instructorUserId);
 
+    List<Grade> findBySubmissionStudentId(Integer studentUserId);
 }

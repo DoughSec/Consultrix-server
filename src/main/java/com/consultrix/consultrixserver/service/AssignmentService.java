@@ -2,15 +2,20 @@ package com.consultrix.consultrixserver.service;
 
 import com.consultrix.consultrixserver.model.Module;
 import com.consultrix.consultrixserver.model.Assignment;
+import com.consultrix.consultrixserver.model.Student;
 import com.consultrix.consultrixserver.model.dto.assignmentDTO.AssignmentRequestDto;
 import com.consultrix.consultrixserver.model.dto.assignmentDTO.AssignmentResponseDto;
 import com.consultrix.consultrixserver.repository.AssignmentRepository;
+import com.consultrix.consultrixserver.repository.ModuleRepository;
+import com.consultrix.consultrixserver.repository.StudentRepository;
+import com.consultrix.consultrixserver.repository.SubmissionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,10 +23,18 @@ import java.util.List;
 public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final ModuleService moduleService;
+    private final StudentRepository studentRepository;
+    private final ModuleRepository moduleRepository;
+    private final SubmissionRepository submissionRepository;
 
-    public AssignmentService(AssignmentRepository assignmentRepository, ModuleService moduleService) {
+    public AssignmentService(AssignmentRepository assignmentRepository, ModuleService moduleService,
+                             StudentRepository studentRepository, ModuleRepository moduleRepository,
+                             SubmissionRepository submissionRepository) {
         this.assignmentRepository = assignmentRepository;
         this.moduleService = moduleService;
+        this.studentRepository = studentRepository;
+        this.moduleRepository = moduleRepository;
+        this.submissionRepository = submissionRepository;
     }
 
     //create
@@ -75,6 +88,61 @@ public class AssignmentService {
             throw new IllegalArgumentException("moduleId cannot be null");
         }
         return assignmentRepository.findByModuleId(moduleId);
+    }
+
+    //getMyAssignments - upcoming assignments for the currently logged in student
+    public List<AssignmentResponseDto> getMyAssignments(Integer studentId) {
+        if (studentId == null) {
+            throw new IllegalArgumentException("Must be logged in");
+        }
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+
+        if (student.getCohort() == null) {
+            return new ArrayList<>();
+        }
+
+        // get all modules for the student's cohort
+        List<Module> modules = moduleRepository.findByCohortIdOrderByOrderIndexAsc(student.getCohort().getId());
+
+        // collect all assignments across those modules
+        List<Assignment> allAssignments = new ArrayList<>();
+        for (Module module : modules) {
+            allAssignments.addAll(assignmentRepository.findByModuleId(module.getId()));
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
+
+        // filter to only upcoming assignments with no submission from this student
+        return allAssignments.stream()
+                .filter(assignment -> {
+                    // check that the due date has not passed yet
+                    if (assignment.getDueTime() != null) {
+                        if (now.isAfter(assignment.getDueTime())) {
+                            return false;
+                        }
+                    } else if (assignment.getDueDate() != null) {
+                        if (today.isAfter(assignment.getDueDate())) {
+                            return false;
+                        }
+                    }
+                    // exclude assignments the student has already submitted
+                    return submissionRepository.findByAssignmentIdAndStudentId(assignment.getId(), studentId).isEmpty();
+                })
+                .map(assignment -> {
+                    AssignmentResponseDto dto = new AssignmentResponseDto();
+                    dto.setAssignmentId(assignment.getId());
+                    dto.setModuleId(assignment.getModule().getId());
+                    dto.setTitle(assignment.getTitle());
+                    dto.setDescription(assignment.getDescription());
+                    dto.setDueDate(assignment.getDueDate());
+                    dto.setDueTime(assignment.getDueTime());
+                    dto.setMaxScore(assignment.getMaxScore());
+                    return dto;
+                })
+                .toList();
     }
 
     //update

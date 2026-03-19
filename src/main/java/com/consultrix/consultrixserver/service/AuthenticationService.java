@@ -44,7 +44,7 @@ public class AuthenticationService {
                 user.getRole()                 // role claim
         );
 
-        return new LoginResponseDto(token, TTL_MILLIS / 1000);
+        return new LoginResponseDto(token, TTL_MILLIS / 1000, user.getRole());
     }
 
     // get current logged in user

@@ -3,8 +3,10 @@ package com.consultrix.consultrixserver.service;
 import com.consultrix.consultrixserver.model.Attendance;
 import com.consultrix.consultrixserver.model.Cohort;
 import com.consultrix.consultrixserver.model.Student;
+import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceProfileResponseDto;
 import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceRequestDto;
 import com.consultrix.consultrixserver.model.dto.attendanceDTO.AttendanceResponseDto;
+import com.consultrix.consultrixserver.model.dto.studentDTO.StudentProfileResponseDto;
 import com.consultrix.consultrixserver.repository.AttendanceRepository;
 import com.consultrix.consultrixserver.repository.CohortRepository;
 import com.consultrix.consultrixserver.repository.StudentRepository;
@@ -103,6 +105,19 @@ public class AttendanceService {
                 .orElseThrow(() -> new IllegalArgumentException("Attendance not found: " + attendanceId));
     }
 
+    //get current student's attendance
+    @Transactional(readOnly = true)
+    public AttendanceProfileResponseDto getMyAttendance(Integer studentId) {
+        if (studentId == null) {
+            throw new IllegalArgumentException("Must be logged in");
+        }
+
+        AttendanceProfileResponseDto responseDto = new AttendanceProfileResponseDto();
+        responseDto.setAttendanceRate(calculateAttendanceRate(studentId));
+
+        return responseDto;
+    }
+
     // update Attendance
     public AttendanceResponseDto update(Integer attendanceId, AttendanceRequestDto updated) {
         Attendance existing = getById(attendanceId);
@@ -133,5 +148,19 @@ public class AttendanceService {
             throw new IllegalArgumentException("Attendance not found: " + attendanceId);
         }
         attendanceRepository.deleteById(attendanceId);
+    }
+
+    //calculate overall attendance rate for logged in student
+    private double calculateAttendanceRate(Integer studentId) {
+        List<Attendance> attendances = attendanceRepository.findByStudentId(studentId);
+        double totalAttendanceDays = attendances.size();
+        double numDaysAttended = 0.0;
+        for(Attendance attendance : attendances) {
+            if(attendance.getStatus().equals("PRESENT")) {
+                numDaysAttended++;
+            }
+        }
+
+        return 100.0 * (numDaysAttended / totalAttendanceDays);
     }
 }

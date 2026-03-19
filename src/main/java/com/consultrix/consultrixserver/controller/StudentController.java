@@ -1,9 +1,11 @@
 package com.consultrix.consultrixserver.controller;
 
 import com.consultrix.consultrixserver.model.Student;
+import com.consultrix.consultrixserver.model.dto.studentDTO.StudentProfileResponseDto;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentRequestDto;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentResponseDto;
 import com.consultrix.consultrixserver.model.dto.studentDTO.StudentPasswordUpdateDto;
+import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -81,6 +83,15 @@ public class StudentController {
     @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
     public List<Student> getStudentByGraduationStatus(@PathVariable("graduationStatus") String graduationStatus) {
         return studentService.listByGraduationStatus(graduationStatus);
+    }
+
+    //get current logged in student's profile
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public StudentProfileResponseDto getStudentProfile() {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return studentService.getMyStudentProfile(currentUserId.intValue());
     }
 
     //update Student record

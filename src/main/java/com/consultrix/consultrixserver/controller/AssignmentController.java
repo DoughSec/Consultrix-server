@@ -7,7 +7,6 @@ import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.AssignmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,6 +57,15 @@ public class AssignmentController {
     @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
     public List<Assignment> getAssignmentByModule(@PathVariable("moduleId") Integer moduleId) {
         return assignmentService.getByModule(moduleId);
+    }
+
+    //get current logged in student's assignments
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public List<AssignmentResponseDto> getStudentProfileAssignments() {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return assignmentService.getMyAssignments(currentUserId.intValue());
     }
 
     //update Assignment record
