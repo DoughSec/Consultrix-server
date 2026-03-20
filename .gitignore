@@ -22,8 +22,8 @@ src/main/resources/.env
 .env
 *.env
 
-DatabaseSeeder
-src/main/java/com/consultrix/consultrixserver/seeder/DatabaseSeeder.java
+#DatabaseSeeder
+#src/main/java/com/consultrix/consultrixserver/seeder/DatabaseSeeder.java
 
 ### NetBeans ###
 /nbproject/private/
