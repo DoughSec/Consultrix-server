@@ -3,6 +3,7 @@ package com.consultrix.consultrixserver.controller;
 import com.consultrix.consultrixserver.model.Assignment;
 import com.consultrix.consultrixserver.model.dto.assignmentDTO.AssignmentRequestDto;
 import com.consultrix.consultrixserver.model.dto.assignmentDTO.AssignmentResponseDto;
+import com.consultrix.consultrixserver.model.dto.assignmentDTO.StudentCourseworkResponseDto;
 import com.consultrix.consultrixserver.security.SecurityUtils;
 import com.consultrix.consultrixserver.service.AssignmentService;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,14 @@ public class AssignmentController {
     public List<AssignmentResponseDto> getStudentProfileAssignments() {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         return assignmentService.getMyAssignments(currentUserId.intValue());
+    }
+
+    @GetMapping("/me/coursework")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public List<StudentCourseworkResponseDto> getStudentCoursework() {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return assignmentService.getMyCoursework(currentUserId.intValue());
     }
 
     //update Assignment record
