@@ -59,8 +59,6 @@ public class SecurityConfig {
 
                         // INSTRUCTOR or ADMIN
                         .requestMatchers("/consultrix/instructors/**").hasAnyRole("INSTRUCTOR", "ADMIN")
-                        .requestMatchers("/consultrix/assignments/**").hasAnyRole("INSTRUCTOR", "ADMIN")
-                        .requestMatchers("/consultrix/attendance/**").hasAnyRole("INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/modules/**").hasAnyRole("INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/grades/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
 
@@ -69,6 +67,8 @@ public class SecurityConfig {
                         .requestMatchers("/consultrix/submissions/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/notifications/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/tickets/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
+                        .requestMatchers("/consultrix/assignments/**").hasAnyRole("STUDENT","INSTRUCTOR", "ADMIN")
+                        .requestMatchers("/consultrix/attendance/**").hasAnyRole("STUDENT","INSTRUCTOR", "ADMIN")
 
                         // everything else requires authentication
                         .anyRequest().authenticated()
