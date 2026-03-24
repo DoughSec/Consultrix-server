@@ -75,6 +75,22 @@ public class GradeController {
         return gradeService.getMyGrades(currentUserId.intValue());
     }
 
+    //get any student's grade profile — instructor or admin
+    @GetMapping("/student/{studentId}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
+    public List<GradeProfileResponseDto> getStudentGradesById(@PathVariable("studentId") Integer studentId) {
+        return gradeService.getMyGrades(studentId);
+    }
+
+    //get all grades for every submission on a given assignment — instructor or admin
+    @GetMapping("/assignment/{assignmentId}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
+    public List<Grade> getGradesByAssignment(@PathVariable("assignmentId") Integer assignmentId) {
+        return gradeService.listByAssignment(assignmentId);
+    }
+
     //update Grade record
     @PutMapping("/{gradeId}")
     @ResponseStatus(HttpStatus.OK)

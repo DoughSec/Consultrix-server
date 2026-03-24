@@ -1,5 +1,6 @@
 package com.consultrix.consultrixserver.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,6 +27,7 @@ public class Facility {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @JsonProperty("addressLine1")
     @Column(name = "address_line1")
     private String address_line1;
 

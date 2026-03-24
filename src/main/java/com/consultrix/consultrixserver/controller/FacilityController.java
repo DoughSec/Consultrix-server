@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -28,7 +27,7 @@ public class FacilityController {
         return facilityService.create(
                 request.getOrganizationId(),
                 request.getName(),
-                request.getAddress_line1(),
+                request.getAddressLine1(),
                 request.getCity(),
                 request.getState(),
                 request.getCountry(),

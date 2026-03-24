@@ -11,7 +11,7 @@ public class FacilityResponseDto {
     private Integer facilityId;
     private Integer organizationId;
     private String name;
-    private String address_line1;
+    private String addressLine1;
     private String city;
     private String state;
     private String country;

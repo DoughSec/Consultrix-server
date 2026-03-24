@@ -62,7 +62,7 @@ public class FacilityService {
         facilityResponseDto.setFacilityId(facility.getId());
         facilityResponseDto.setOrganizationId(facility.getOrganization().getId());
         facilityResponseDto.setName(facility.getName());
-        facilityResponseDto.setAddress_line1(facility.getAddress_line1());
+        facilityResponseDto.setAddressLine1(facility.getAddress_line1());
         facilityResponseDto.setCity(facility.getCity());
         facilityResponseDto.setState(facility.getState());
         facilityResponseDto.setCountry(facility.getCountry());
@@ -108,7 +108,7 @@ public class FacilityService {
         existing.setCountry(facility.getCountry());
         existing.setCapacity(facility.getCapacity());
         existing.setName(facility.getName());
-        existing.setAddress_line1(facility.getAddress_line1());
+        existing.setAddress_line1(facility.getAddressLine1());
 
         facilityRepository.save(existing);
 
@@ -116,7 +116,7 @@ public class FacilityService {
         facilityResponseDto.setFacilityId(existing.getId());
         facilityResponseDto.setOrganizationId(existing.getOrganization().getId());
         facilityResponseDto.setName(existing.getName());
-        facilityResponseDto.setAddress_line1(existing.getAddress_line1());
+        facilityResponseDto.setAddressLine1(existing.getAddress_line1());
         facilityResponseDto.setState(existing.getState());
         facilityResponseDto.setCountry(existing.getCountry());
         facilityResponseDto.setCapacity(existing.getCapacity());

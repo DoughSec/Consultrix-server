@@ -118,7 +118,8 @@ public class GradeService {
                 .map(Grade::getScore)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal overallPercent = calculateOverallGradePercentage(overallEarnedScore);
+        // Scope the overall percentage to the student's own cohort assignments only
+        BigDecimal overallPercent = calculateOverallGradePercentageForStudent(studentId, overallEarnedScore);
         String overallLetter = calculateOverallLetterGrade(overallPercent);
 
         return grades.stream().map(grade -> {
@@ -140,6 +141,15 @@ public class GradeService {
 
             return dto;
         }).toList();
+    }
+
+    // getByAssignment — all grades for all submissions belonging to an assignment
+    @Transactional(readOnly = true)
+    public List<Grade> listByAssignment(Integer assignmentId) {
+        if (assignmentId == null) {
+            throw new IllegalArgumentException("assignmentId is required");
+        }
+        return gradeRepository.findBySubmission_Assignment_Id(assignmentId);
     }
 
     // update Grade
@@ -190,6 +200,31 @@ public class GradeService {
         } else {
             return "F";
         }
+    }
+
+    // Overall grade percentage scoped to only the student's own cohort's assignments
+    private BigDecimal calculateOverallGradePercentageForStudent(Integer studentId, BigDecimal overallEarnedScore) {
+        LocalDateTime now = LocalDateTime.now();
+
+        Student student = studentRepository.findById(studentId).orElse(null);
+        if (student == null || student.getCohort() == null) {
+            return calculateOverallGradePercentage(overallEarnedScore);
+        }
+
+        List<Assignment> cohortAssignments = assignmentRepository.findByModule_Cohort_Id(student.getCohort().getId());
+        BigDecimal maxScore = BigDecimal.ZERO;
+        for (Assignment assignment : cohortAssignments) {
+            if (isAssignmentPastDue(assignment, now)) {
+                maxScore = maxScore.add(assignment.getMaxScore());
+            }
+        }
+
+        if (maxScore.compareTo(BigDecimal.ZERO) == 0) {
+            return null;
+        }
+        return overallEarnedScore
+                .multiply(new BigDecimal("100"))
+                .divide(maxScore, 2, RoundingMode.HALF_UP);
     }
 
     //find the overall grade percentage based on all assignments

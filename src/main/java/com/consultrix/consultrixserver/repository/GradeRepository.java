@@ -15,4 +15,7 @@ public interface GradeRepository extends JpaRepository<Grade, Integer> {
     Optional<Grade> findBySubmissionIdAndInstructorId(Integer submissionId, Integer instructorUserId);
 
     List<Grade> findBySubmissionStudentId(Integer studentUserId);
+
+    /** All grades for every submission on a given assignment */
+    List<Grade> findBySubmission_Assignment_Id(Integer assignmentId);
 }
