@@ -49,6 +49,8 @@ public class SecurityConfig {
                         // public – anyone can register, login, or hit /me
                         .requestMatchers("/consultrix/auth/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        // WebSocket handshake (auth handled by STOMP channel interceptor)
+                        .requestMatchers("/ws/**").permitAll()
 
                         // ADMIN-only endpoints
                         .requestMatchers("/consultrix/organizations/**").hasRole("ADMIN")
@@ -69,6 +71,10 @@ public class SecurityConfig {
                         .requestMatchers("/consultrix/tickets/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/assignments/**").hasAnyRole("STUDENT","INSTRUCTOR", "ADMIN")
                         .requestMatchers("/consultrix/attendance/**").hasAnyRole("STUDENT","INSTRUCTOR", "ADMIN")
+
+                        // messaging & calendar
+                        .requestMatchers("/consultrix/conversations/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
+                        .requestMatchers("/consultrix/calendar/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
 
                         // everything else requires authentication
                         .anyRequest().authenticated()
