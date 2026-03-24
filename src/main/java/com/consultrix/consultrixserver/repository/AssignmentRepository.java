@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Integer> {
     List<Assignment> findByModuleId(Integer moduleId);
+
+    /** All assignments belonging to modules in a given cohort */
+    List<Assignment> findByModule_Cohort_Id(Integer cohortId);
 }
