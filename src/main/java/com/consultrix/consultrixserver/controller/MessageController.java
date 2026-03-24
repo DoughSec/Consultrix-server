@@ -47,6 +47,14 @@ public class MessageController {
         return messageService.getMessages(conversationId, userId);
     }
 
+    @DeleteMapping("/{conversationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_INSTRUCTOR','ROLE_ADMIN')")
+    public void deleteConversation(@PathVariable Integer conversationId, Authentication auth) {
+        Integer userId = Integer.parseInt(auth.getName());
+        messageService.deleteConversation(conversationId, userId);
+    }
+
     @DeleteMapping("/messages/{messageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_INSTRUCTOR','ROLE_ADMIN')")

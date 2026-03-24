@@ -103,6 +103,16 @@ public class MessageService {
         return toMessageDto(message);
     }
 
+    public void deleteConversation(Integer conversationId, Integer requestingUserId) {
+        Conversation conversation = getConversation(conversationId);
+        boolean isMember = conversation.getMembers().stream()
+                .anyMatch(m -> m.getId().equals(requestingUserId));
+        if (!isMember) {
+            throw new IllegalArgumentException("User is not a member of this conversation");
+        }
+        conversationRepository.delete(conversation);
+    }
+
     public void deleteMessage(Integer messageId, Integer requestingUserId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new IllegalArgumentException("Message not found: " + messageId));
