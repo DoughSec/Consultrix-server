@@ -64,7 +64,7 @@ public class StudentController {
     //get Student records by cohort
     @GetMapping("/cohort/{cohortId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_INSTRUCTOR','ROLE_ADMIN')")
     public List<Student> getStudentByCohort(@PathVariable("cohortId") Integer cohortId) {
         return studentService.listByCohort(cohortId);
     }
