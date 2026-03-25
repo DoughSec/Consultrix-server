@@ -68,13 +68,22 @@ public class AttendanceController {
         return attendanceService.listByStudent(studentId);
     }
 
-    //get current logged in student's attendance
+    //get current logged in student's attendance rate
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public AttendanceProfileResponseDto getStudentProfileAttendance() {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         return attendanceService.getMyAttendance(currentUserId.intValue());
+    }
+
+    //get current logged in student's individual attendance records
+    @GetMapping("/me/records")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public List<AttendanceResponseDto> getMyAttendanceRecords() {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        return attendanceService.getMyAttendanceRecords(currentUserId.intValue());
     }
 
     //update attendance record

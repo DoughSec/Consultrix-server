@@ -105,6 +105,26 @@ public class AttendanceService {
                 .orElseThrow(() -> new IllegalArgumentException("Attendance not found: " + attendanceId));
     }
 
+    // get current student's individual attendance records
+    @Transactional(readOnly = true)
+    public List<AttendanceResponseDto> getMyAttendanceRecords(Integer studentId) {
+        if (studentId == null) {
+            throw new IllegalArgumentException("Must be logged in");
+        }
+        return attendanceRepository.findByStudentId(studentId).stream()
+                .map(a -> {
+                    AttendanceResponseDto dto = new AttendanceResponseDto();
+                    dto.setAttendanceId(a.getId());
+                    dto.setCohortId(a.getCohort().getId());
+                    dto.setStudentUserId(a.getStudent().getId());
+                    dto.setAttendanceDate(a.getAttendanceDate());
+                    dto.setStatus(a.getStatus());
+                    dto.setNote(a.getNote());
+                    return dto;
+                })
+                .toList();
+    }
+
     //get current student's attendance
     @Transactional(readOnly = true)
     public AttendanceProfileResponseDto getMyAttendance(Integer studentId) {
